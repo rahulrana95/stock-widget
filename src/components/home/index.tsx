@@ -1,7 +1,12 @@
-import React from 'react';
-
+import React from "react";
+import StockWidget from "../stock-widget";
+import "./index.css";
 const Home = () => {
-    return <div>home</div>
-}
+  return (
+    <div className="home">
+      <StockWidget />
+    </div>
+  );
+};
 
 export default Home;

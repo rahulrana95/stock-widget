@@ -1,0 +1,42 @@
+.search-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.stock-widget {
+  width: 400px;
+  position: relative;
+}
+
+.suggestions-list {
+  position: absolute;
+  width: inherit;
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.loading-dots-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.loading-dots {
+  display: inline-block;
+  animation: loading 1s infinite;
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
