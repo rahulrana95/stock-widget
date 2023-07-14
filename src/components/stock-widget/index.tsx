@@ -1,57 +1,21 @@
 import React, { useState, useEffect } from "react";
 import InputGroup from "react-bootstrap/InputGroup";
-import { Form, FormControl, ListGroup } from "react-bootstrap";
+import { Form, ListGroup } from "react-bootstrap";
 import SearchIcon from "../../images/search-icon.svg";
 import "./index.css";
+import getTickerSuggestions, { Ticker } from "../../services/getTickets";
 
 const StockWidget = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Ticker[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      // Mock API call or data retrieval logic to fetch autocomplete suggestions
-      // Replace this with your actual logic
-      const mockSuggestions = [
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Durian",
-        "Elderberry",
-        "Fig",
-        "Grape",
-        "Honeydew",
-        "Imbe",
-        "Jackfruit",
-        "Kiwi",
-        "Lemon",
-        "Mango",
-        "Nectarine",
-        "Orange",
-        "Papaya",
-        "Quince",
-        "Raspberry",
-        "Strawberry",
-        "Tomato",
-        "Ugli fruit",
-        "Vanilla",
-        "Watermelon",
-        "Xigua",
-        "Yellow passionfruit",
-        "Zucchini",
-      ];
-
-      // Filter suggestions based on the search term
-      const filteredSuggestions = mockSuggestions.filter((item) =>
-        item.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setSuggestions(filteredSuggestions);
+    getTickerSuggestions(searchTerm).then((response) => {
+      const filteredSuggestions = response?.tickers ?? [];
+      setSuggestions([...filteredSuggestions]);
       setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(delay);
+    });
   }, [searchTerm]);
 
   const handleChange = (event: any) => {
@@ -59,6 +23,8 @@ const StockWidget = () => {
     setSearchTerm(value);
     setLoading(true);
   };
+
+  console.log(suggestions);
 
   return (
     <div className="stock-widget">
@@ -86,9 +52,14 @@ const StockWidget = () => {
           )}
           {!loading &&
             searchTerm &&
-            suggestions.map((item, index) => (
-              <ListGroup.Item key={index}>{item}</ListGroup.Item>
-            ))}
+            suggestions.map((item, index) => {
+              return (
+                <ListGroup.Item key={index}>
+                  {/** @ts-ignore */}
+                  {`${item.name} (${item.symbol})` ?? "Missing name"}
+                </ListGroup.Item>
+              );
+            })}
         </ListGroup>
       )}
     </div>
