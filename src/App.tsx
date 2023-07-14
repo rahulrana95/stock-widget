@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" Component={HomePage}></Route>
-        <Route path="/stock/:id" Component={StockDetailsPage} />
+        <Route path="/stock/:ticker" Component={StockDetailsPage} />
       </Routes>
     </Router>
   );

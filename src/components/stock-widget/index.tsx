@@ -4,11 +4,15 @@ import { Form, ListGroup } from "react-bootstrap";
 import SearchIcon from "../../images/search-icon.svg";
 import "./index.css";
 import getTickerSuggestions, { Ticker } from "../../services/getTickets";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const StockWidget = () => {
+const StockWidget = (props: any) => {
+  console.log(props);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<Ticker[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTickerSuggestions(searchTerm).then((response) => {
@@ -24,8 +28,10 @@ const StockWidget = () => {
     setLoading(true);
   };
 
-  console.log(suggestions);
-
+  const onClickSuggestItem = (item: Ticker) => {
+    navigate(`/stock/${item.symbol}`);
+    setSearchTerm("");
+  };
   return (
     <div className="stock-widget">
       <InputGroup className="mb-3">
@@ -54,8 +60,12 @@ const StockWidget = () => {
             searchTerm &&
             suggestions.map((item, index) => {
               return (
-                <ListGroup.Item key={index}>
-                  {/** @ts-ignore */}
+                <ListGroup.Item
+                  key={index}
+                  className="suggestion-item"
+                  onClick={() => onClickSuggestItem(item)}
+                >
+                  {" "}
                   {`${item.name} (${item.symbol})` ?? "Missing name"}
                 </ListGroup.Item>
               );

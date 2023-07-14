@@ -1,7 +1,8 @@
 import React from "react";
+import StockDetails from "../components/stock-details";
 
 const StockDetailsPage = () => {
-  return <div>stock detials</div>;
+  return <StockDetails />;
 };
 
 export default StockDetailsPage;
