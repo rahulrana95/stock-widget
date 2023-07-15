@@ -3,19 +3,25 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { Form, ListGroup } from "react-bootstrap";
 import SearchIcon from "../../images/search-icon.svg";
 import "./index.css";
-import getTickerSuggestions, { Ticker } from "../../services/getTickets";
-import { Link } from "react-router-dom";
+import getTickerSuggestions, {
+  getTickerSuggestionsResponse,
+  Ticker,
+} from "../../services/getTickets";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "../../utils";
 
 const StockWidget = (props: any) => {
-  console.log(props);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<Ticker[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const getTickerSuggestionsDebounced = debounce(getTickerSuggestions, 300);
 
   useEffect(() => {
-    getTickerSuggestions(searchTerm).then((response) => {
+    const returnPromise: Promise<getTickerSuggestionsResponse> =
+      getTickerSuggestionsDebounced(searchTerm);
+
+    returnPromise.then((response) => {
       const filteredSuggestions = response?.tickers ?? [];
       setSuggestions([...filteredSuggestions]);
       setLoading(false);
@@ -32,6 +38,7 @@ const StockWidget = (props: any) => {
     navigate(`/stock/${item.symbol}`);
     setSearchTerm("");
   };
+
   return (
     <div className="stock-widget">
       <InputGroup className="mb-3">
