@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import dummyResponse from "./data.json";
+import "./index.css";
 
 ChartJS.register(
   CategoryScale,
@@ -77,14 +78,14 @@ const StockChart = ({ symbol }: PropsT) => {
   };
 
   return (
-    <div>
+    <>
       {chartData ? (
         // @ts-ignore
         <Line options={options} data={chartData} />
       ) : (
         <div>Loading...</div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,0 +1,6 @@
+.chart {
+  display: flex;
+  justify-content: center;
+  min-width: 350px;
+  height: auto;
+}

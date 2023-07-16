@@ -89,7 +89,9 @@ const StockDetails = () => {
                       <Card.Title className="title">
                         {Labels[key] ?? "N/A"}
                       </Card.Title>
-                      <Card.Text className="description">{value}</Card.Text>
+                      <Card.Text className="description d-xs-block d-sm-block d-md-block">
+                        {value}
+                      </Card.Text>
                     </Card.Body>
                   </Card>
                 </OverlayTrigger>
