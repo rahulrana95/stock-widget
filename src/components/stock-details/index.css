@@ -55,7 +55,19 @@
   max-height: 600px;
 }
 
+@media (max-width: 420px) {
+  .stock-details-items {
+    flex-direction: column;
+  }
+
+  .stock-info-box {
+    width: 100%;
+  }
+}
 @media (max-width: 576px) {
+  .stock-details-items {
+    justify-content: flex-start;
+  }
 }
 @media (min-width: 576px) {
 }

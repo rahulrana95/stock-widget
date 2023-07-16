@@ -10,7 +10,7 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <Navbar bg="light" expand="lg" className="header">
+    <Navbar bg="light" expand="lg" className="header content-area">
       <Col lg={2} xs={2}>
         <Navbar.Brand href="/">
           <img

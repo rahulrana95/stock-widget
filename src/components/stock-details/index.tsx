@@ -69,7 +69,7 @@ const StockDetails = () => {
   }, [ticker]);
   //   GLOBAL_QUOTE
   return (
-    <div className="stock-details">
+    <div className="stock-details content-area">
       <Row>
         <Col lg={6} sm={12} className="stock-chart">
           <StockChart symbol={ticker} />
