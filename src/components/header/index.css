@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 20px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.header {
+  max-width: 1280px;
+  margin: auto;
+}
+
+.mobile-menu {
+  background-color: #f8f9fa; /* Set a background color for the mobile menu */
+  padding: 10px; /* Add padding to the mobile menu */
+}
+
+.mobile-menu .nav-link {
+  color: #000; /* Customize the text color of the mobile menu links */
+  padding: 5px 15px; /* Adjust the spacing of the mobile menu links */
+}
+
+.mobile-menu .nav-link:hover {
+  background-color: #e9ecef; /* Add a background color on hover for better user experience */
+}
+
+.right-menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mobile-menu .nav-link.active {
+  font-weight: bold;
+  color: #539ff2;
+}

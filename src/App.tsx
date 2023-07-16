@@ -4,14 +4,17 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import HomePage from "./pages/home";
 import StockDetailsPage from "./pages/stock-view";
+import Layout from "./components/layout";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" Component={HomePage}></Route>
-        <Route path="/stock/:ticker" Component={StockDetailsPage} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" Component={HomePage} />
+          <Route path="/stock/:ticker" Component={StockDetailsPage} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }

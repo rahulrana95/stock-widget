@@ -18,14 +18,18 @@ const StockWidget = (props: any) => {
   const getTickerSuggestionsDebounced = debounce(getTickerSuggestions, 300);
 
   useEffect(() => {
-    const returnPromise: Promise<getTickerSuggestionsResponse> =
-      getTickerSuggestionsDebounced(searchTerm);
+    if (searchTerm) {
+      const returnPromise: Promise<getTickerSuggestionsResponse> =
+        getTickerSuggestionsDebounced(searchTerm);
 
-    returnPromise.then((response) => {
-      const filteredSuggestions = response?.tickers ?? [];
-      setSuggestions([...filteredSuggestions]);
-      setLoading(false);
-    });
+      returnPromise.then((response) => {
+        const filteredSuggestions = response?.tickers ?? [];
+        setSuggestions([...filteredSuggestions]);
+        setLoading(false);
+      });
+    }
+
+    setLoading(false);
   }, [searchTerm]);
 
   const handleChange = (event: any) => {
@@ -41,7 +45,7 @@ const StockWidget = (props: any) => {
 
   return (
     <div className="stock-widget">
-      <InputGroup className="mb-3">
+      <InputGroup>
         <InputGroup.Text id="basic-addon1">
           <img src={SearchIcon} alt="Search icon" className="search-icon" />
         </InputGroup.Text>
