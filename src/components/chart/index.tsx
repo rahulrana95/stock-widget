@@ -31,7 +31,11 @@ const options = {
   },
 };
 
-const StockChart = () => {
+type PropsT = {
+  symbol?: string;
+};
+
+const StockChart = ({ symbol }: PropsT) => {
   const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
