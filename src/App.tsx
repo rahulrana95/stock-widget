@@ -5,6 +5,8 @@ import "./App.css";
 import HomePage from "./pages/home";
 import StockDetailsPage from "./pages/stock-view";
 import Layout from "./components/layout";
+import HelpPage from "./pages/help";
+import AboutUsPage from "./pages/about-us";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Routes>
           <Route path="/" Component={HomePage} />
           <Route path="/stock/:ticker" Component={StockDetailsPage} />
+          <Route path="/help" Component={HelpPage} />
+          <Route path="/about" Component={AboutUsPage} />
         </Routes>
       </Layout>
     </Router>
