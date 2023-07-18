@@ -20,14 +20,12 @@ function getTickerSuggestions(
     };
 
     try {
-      const response =
-        { json: () => {} } ??
-        (await fetch(
-          `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${symbol}&apikey=${apiKey}`
-        ));
+      const response = await fetch(
+        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${symbol}&apikey=${apiKey}`
+      );
       const result: {
         bestMatches: Ticker[];
-      } = getTicketsData ?? (await response.json());
+      } = await response.json();
 
       finalResult = {
         tickers: result.bestMatches.map((ticket) => {

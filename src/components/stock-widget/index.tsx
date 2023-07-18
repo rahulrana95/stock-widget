@@ -16,28 +16,11 @@ const StockWidget = (props: any) => {
     searchTerm,
     suggestions,
     //loading,
-    setSuggestions,
     setLoading,
     setSearchTerm,
   } = useStockWidgetContext();
 
   const navigate = useNavigate();
-  const getTickerSuggestionsDebounced = debounce(getTickerSuggestions, 300);
-
-  useEffect(() => {
-    if (searchTerm) {
-      const returnPromise: Promise<getTickerSuggestionsResponse> =
-        getTickerSuggestionsDebounced(searchTerm);
-
-      returnPromise.then((response) => {
-        const filteredSuggestions = response?.tickers ?? [];
-        setSuggestions([...filteredSuggestions]);
-        setLoading(false);
-      });
-    }
-
-    setLoading(false);
-  }, [searchTerm]);
 
   const handleChange = (event: any) => {
     const { value } = event.target;

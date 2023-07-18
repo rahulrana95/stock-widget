@@ -35,19 +35,34 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<Ticker[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [cachedSuggestions, setCachedSuggestions] = useState<{
+    [term: string]: Ticker[];
+  }>({});
+
   const getTickerSuggestionsDebounced = debounce(getTickerSuggestions, 300);
 
   useEffect(() => {
     if (searchTerm) {
       setLoading(true);
-      const returnPromise: Promise<getTickerSuggestionsResponse> =
-        getTickerSuggestionsDebounced(searchTerm);
-
-      returnPromise.then((response) => {
-        const filteredSuggestions = response?.tickers ?? [];
-        setSuggestions([...filteredSuggestions]);
+      // Check if suggestions are cached for the current search term
+      if (cachedSuggestions[searchTerm]) {
+        setSuggestions(cachedSuggestions[searchTerm]);
         setLoading(false);
-      });
+      } else {
+        const returnPromise: Promise<getTickerSuggestionsResponse> =
+          getTickerSuggestionsDebounced(searchTerm);
+
+        returnPromise.then((response) => {
+          const filteredSuggestions = response?.tickers ?? [];
+          setSuggestions([...filteredSuggestions]);
+          // Cache the suggestions for the current search term
+          setCachedSuggestions((prevCached) => ({
+            ...prevCached,
+            [searchTerm]: filteredSuggestions,
+          }));
+          setLoading(false);
+        });
+      }
     } else {
       setSuggestions([]);
       setLoading(false);
