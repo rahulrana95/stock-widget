@@ -6,10 +6,6 @@ import { Col, Row, Card, OverlayTrigger, Tooltip } from "react-bootstrap";
 import "./index.css";
 import fetchTickerDetails from "../../services/getTickerDetails";
 
-function titleCase(string: string) {
-  return string[0].toUpperCase() + string.slice(1).toLowerCase();
-}
-
 const Labels: {
   [key: string]: string;
 } = {
@@ -23,7 +19,7 @@ const Labels: {
   sector: "Sector",
 };
 
-type Stock = {
+export type Stock = {
   name: string;
   symbol: string;
   description: string;
@@ -40,33 +36,11 @@ const keysToSkip: {
   description: "description",
 };
 
-const StockDetails = () => {
-  const params = useParams();
-  const { ticker } = params;
-  const [stock, setStock] = useState<Stock | null>(null);
-
-  useEffect(() => {
-    if (ticker) {
-      fetchTickerDetails(ticker)
-        .then((response: any) => {
-          setStock({
-            name: titleCase(response.Name),
-            symbol: response.Symbol,
-            description: response.Description,
-            currentPrice: "120",
-            industry: titleCase(response.Industry),
-            sector: titleCase(response.Sector),
-            peRatio: titleCase(response.PERatio),
-            marketCap: Intl.NumberFormat("en", {
-              notation: "compact",
-            }).format(parseInt(response.MarketCapitalization)),
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [ticker]);
+type StockDetailsT = {
+  stock: Stock | null;
+  ticker?: string;
+};
+const StockDetails = ({ stock, ticker }: StockDetailsT) => {
   //   GLOBAL_QUOTE
   return (
     <div className="stock-details content-area">
