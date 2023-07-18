@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { createFalse } from "typescript";
 import StockDetails, { Stock } from "../components/stock-details";
 import { useGlobalContext } from "../context/global-context";
 import fetchTickerDetails from "../services/getTickerDetails";
@@ -12,11 +13,16 @@ const StockDetailsPage = () => {
   const params = useParams();
   const { ticker } = params;
   const [stock, setStock] = useState<Stock | null>(null);
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { stockCaching, setStockCaching } = useGlobalContext();
   useEffect(() => {
     if (ticker) {
+      setIsLoading(true);
       if (stockCaching[ticker]) {
         setStock({ ...stockCaching[ticker] });
+        setIsLoading(false);
       } else {
         fetchTickerDetails(ticker)
           .then((response: any) => {
@@ -34,15 +40,17 @@ const StockDetailsPage = () => {
             };
             setStock(currentStock);
             setStockCaching(currentStock);
+            setIsLoading(false);
           })
           .catch((error) => {
-            console.log(error);
+            setError(error);
+            setIsLoading(false);
           });
       }
     }
   }, [ticker]);
 
-  return <StockDetails stock={stock} />;
+  return <StockDetails stock={stock} error={error} isLoading={isLoading} />;
 };
 
 export default StockDetailsPage;

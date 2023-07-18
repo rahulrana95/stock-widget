@@ -8,9 +8,9 @@ function fetchTickerDetails(
 ) {
   const apiUrl = `https://www.alphavantage.co/query?function=${functionVal}&symbol=${ticketSymbol}&apikey=${apiKey}`;
 
-  return new Promise((resolve) => {
-    resolve(getTicketDetailsOfATickerData);
-    return;
+  return new Promise((resolve, reject) => {
+    // resolve(getTicketDetailsOfATickerData);
+    // return;
     fetch(apiUrl)
       .then((response) => response.json())
       .then(
@@ -18,21 +18,29 @@ function fetchTickerDetails(
           "Global Quote": {
             [key: string]: string;
           };
+          Note?: string;
+          Information?: string;
         }) => {
           // Process the response data as needed
           const newTicket: { [key: string]: string } = {};
 
-          Object.entries(data["Global Quote"]).forEach(([key, value]) => {
-            const newKey: string | undefined = key.split(" ").pop() ?? "";
+          if (data.Note || data.Information) {
+            reject("There is something wrong.");
+          } else {
+            // Object.entries(data["Global Quote"]).forEach(([key, value]) => {
+            //   const newKey: string | undefined = key.split(" ").pop() ?? "";
 
-            newTicket[newKey] = value;
-          });
+            //   newTicket[newKey] = value;
+            // });
 
-          resolve(newTicket);
+            // resolve(newTicket);
+            resolve(data);
+          }
         }
       )
       .catch((error) => {
         console.error("Error fetching ticket details:", error);
+        reject(error.message);
       });
   });
 }

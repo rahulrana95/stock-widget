@@ -39,40 +39,56 @@ const keysToSkip: {
 type StockDetailsT = {
   stock: Stock | null;
   ticker?: string;
+  error?: string;
+  isLoading: boolean;
 };
-const StockDetails = ({ stock, ticker }: StockDetailsT) => {
+const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
   //   GLOBAL_QUOTE
   return (
     <div className="stock-details content-area">
-      <Row>
-        <Col lg={6} sm={12} className="stock-chart">
-          <StockChart symbol={ticker} />
-        </Col>
-        <Col lg={6} sm={12} className="stock-details-items">
-          {Object.entries(stock ?? {})
-            .filter(([key]) => !keysToSkip[key])
-            .map(([key, value]) => {
-              const renderTooltip = (text: string) => (
-                <Tooltip className="stock-item-tooltip">{text}</Tooltip>
-              );
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && error && (
+        <div className="error-message">
+          <span role="img" aria-label="Error">
+            ❌
+          </span>{" "}
+          {error} {/* Display the error message */}
+        </div>
+      )}
+      {!isLoading && !error && (
+        <Row>
+          <Col lg={6} sm={12} className="stock-chart">
+            <StockChart symbol={ticker} />
+          </Col>
+          <Col lg={6} sm={12} className="stock-details-items">
+            {Object.entries(stock ?? {})
+              .filter(([key]) => !keysToSkip[key])
+              .map(([key, value]) => {
+                const renderTooltip = (text: string) => (
+                  <Tooltip className="stock-item-tooltip">{text}</Tooltip>
+                );
 
-              return (
-                <OverlayTrigger placement="top" overlay={renderTooltip(value)}>
-                  <Card className="stock-info-box">
-                    <Card.Body>
-                      <Card.Title className="title">
-                        {Labels[key] ?? "N/A"}
-                      </Card.Title>
-                      <Card.Text className="description d-xs-block d-sm-block d-md-block">
-                        {value}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </OverlayTrigger>
-              );
-            })}
-        </Col>
-      </Row>
+                return (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={renderTooltip(value)}
+                  >
+                    <Card className="stock-info-box">
+                      <Card.Body>
+                        <Card.Title className="title">
+                          {Labels[key] ?? "N/A"}
+                        </Card.Title>
+                        <Card.Text className="description d-xs-block d-sm-block d-md-block">
+                          {value}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </OverlayTrigger>
+                );
+              })}
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };
