@@ -3,26 +3,21 @@ function debounce<T extends any[]>(
   ms: number = 0
 ): (...args: T) => Promise<any> {
   let timer: NodeJS.Timeout | null = null;
-  let resolves: ((value: any) => void)[] = [];
+  let resolves: ((value: any) => void) | null = null;
 
   return function debounced(...args: T): Promise<any> {
     clearTimeout(timer!);
     return new Promise((resolve) => {
       timer = setTimeout(() => {
         const result = inner(...args);
-        resolves.forEach((r) => r(result));
-        resolves = [];
+        resolves && resolves(result);
+        resolves = null;
       }, ms);
-      resolves.push(resolve);
+      resolves = resolve;
     });
   };
 }
 
-
-function fixKeys(obj: Object) {
-
-}
+function fixKeys(obj: Object) {}
 
 export { debounce };
-
-
