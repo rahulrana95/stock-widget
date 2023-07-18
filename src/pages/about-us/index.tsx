@@ -4,7 +4,7 @@ import "./index.css"; // Import custom CSS for additional styling
 
 const AboutUsPage: React.FC = () => {
   return (
-    <Container className="about-us-page content-area">
+    <div className="about-us-page content-area">
       <Row>
         <Col>
           <h1>
@@ -105,7 +105,7 @@ const AboutUsPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

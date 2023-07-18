@@ -9,11 +9,18 @@ import getTickerSuggestions, {
 } from "../../services/getTickets";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "../../utils";
+import { useStockWidgetContext } from "../../context/stock-widget-context";
 
 const StockWidget = (props: any) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState<Ticker[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const {
+    searchTerm,
+    suggestions,
+    //loading,
+    setSuggestions,
+    setLoading,
+    setSearchTerm,
+  } = useStockWidgetContext();
+
   const navigate = useNavigate();
   const getTickerSuggestionsDebounced = debounce(getTickerSuggestions, 300);
 
@@ -43,6 +50,7 @@ const StockWidget = (props: any) => {
     setSearchTerm("");
   };
 
+  const loading = false;
   return (
     <div className="stock-widget">
       <InputGroup>
@@ -76,7 +84,6 @@ const StockWidget = (props: any) => {
                   className="suggestion-item"
                   onClick={() => onClickSuggestItem(item)}
                 >
-                  {" "}
                   {`${item.name} (${item.symbol})` ?? "Missing name"}
                 </ListGroup.Item>
               );

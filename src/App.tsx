@@ -7,18 +7,21 @@ import StockDetailsPage from "./pages/stock-view";
 import Layout from "./components/layout";
 import HelpPage from "./pages/help";
 import AboutUsPage from "./pages/about-us";
+import { StockWidgetProvider } from "./context/stock-widget-context";
 
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" Component={HomePage} />
-          <Route path="/stock/:ticker" Component={StockDetailsPage} />
-          <Route path="/help" Component={HelpPage} />
-          <Route path="/about" Component={AboutUsPage} />
-        </Routes>
-      </Layout>
+      <StockWidgetProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" Component={HomePage} />
+            <Route path="/stock/:ticker" Component={StockDetailsPage} />
+            <Route path="/help" Component={HelpPage} />
+            <Route path="/about" Component={AboutUsPage} />
+          </Routes>
+        </Layout>
+      </StockWidgetProvider>
     </Router>
   );
 }

@@ -5,7 +5,7 @@ import HelpImage from "../../images/contact-us.png"; // Replace with the path to
 
 const HelpPage: React.FC = () => {
   return (
-    <Container className="help-page">
+    <div className="help-page content-area">
       <Row>
         <Col>
           <h1>Help Page</h1>
@@ -47,7 +47,7 @@ const HelpPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 
