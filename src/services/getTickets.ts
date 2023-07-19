@@ -8,7 +8,7 @@ export interface getTickerSuggestionsResponse {
   errorMessage: string;
 }
 
-const apiKey = process.env.ALPHA_ADVANTAGE_KEY;
+const apiKey = process.env.REACT_APP_ALPHA_ADVANTAGE_KEY;
 
 function getTickerSuggestions(
   symbol: string
@@ -25,7 +25,12 @@ function getTickerSuggestions(
       );
       const result: {
         bestMatches: Ticker[];
+        Information?: string;
       } = await response.json();
+
+      if (result.Information) {
+        throw Error("Soemthing is wrong.");
+      }
 
       finalResult = {
         tickers: result.bestMatches.map((ticket) => {

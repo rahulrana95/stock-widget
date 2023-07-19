@@ -14,6 +14,17 @@
   max-height: 400px;
   overflow: scroll;
   z-index: 10;
+  min-height: 100px;
+  background-color: white;
+}
+
+.no-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  margin-top: 10px;
 }
 
 .loading-dots-container {
@@ -24,6 +35,9 @@
   background-color: white;
   border: 1px solid #dee2e6;
   border-radius: 10px;
+  position: absolute;
+  z-index: 12;
+  width: 100%;
 }
 
 .loading-dots {
@@ -51,4 +65,9 @@
   100% {
     opacity: 0.2;
   }
+}
+
+.close-icon {
+  width: 20px;
+  cursor: pointer;
 }

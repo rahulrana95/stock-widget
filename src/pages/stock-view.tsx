@@ -17,8 +17,9 @@ const StockDetailsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { stockCaching, setStockCaching } = useGlobalContext();
+
   useEffect(() => {
-    if (ticker) {
+    if (ticker && !isLoading) {
       setIsLoading(true);
       if (stockCaching[ticker]) {
         setStock({ ...stockCaching[ticker] });
@@ -48,7 +49,7 @@ const StockDetailsPage = () => {
           });
       }
     }
-  }, [ticker]);
+  }, []);
 
   return <StockDetails stock={stock} error={error} isLoading={isLoading} />;
 };

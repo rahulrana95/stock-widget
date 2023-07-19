@@ -6,10 +6,33 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import debounce from "lodash/debounce";
+// import debounce from "lodash/debounce";
 import getTickerSuggestions, { Ticker } from "../services/getTickets";
 import { useNavigate } from "react-router-dom";
 import { getTickerSuggestionsResponse } from "../services/getTickets";
+
+type DebouncedFunction<T extends (...args: any[]) => any> = (
+  ...args: Parameters<T>
+) => void;
+
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): DebouncedFunction<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | null;
+
+  return function debouncedFunction(...args: Parameters<T>): void {
+    // Clear any previous timeouts
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
 
 type StockWidgetContextValue = {
   searchTerm: string;
@@ -44,50 +67,46 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
   const [cachedSuggestions, setCachedSuggestions] = useState<{
     [term: string]: Ticker[];
   }>({});
-  const startTime = new Date().getTime();
 
-  const debounceAPi = useCallback(() => {
-    console.log(searchTerm);
-    const endTime = new Date().getTime();
-
-    console.log(endTime - startTime);
-    setLoading(true);
-    // Check if suggestions are cached for the current search term
-    if (cachedSuggestions[searchTerm]) {
-      setSuggestions(cachedSuggestions[searchTerm]);
-      setLoading(false);
-    } else {
-      const returnPromise: Promise<getTickerSuggestionsResponse> =
-        getTickerSuggestions(searchTerm);
-
-      returnPromise.then((response) => {
-        console.log(response.tickers);
-        const filteredSuggestions = response?.tickers ?? [];
-        setSuggestions([...filteredSuggestions]);
-        // Cache the suggestions for the current search term
-        setCachedSuggestions((prevCached) => ({
-          ...prevCached,
-          [searchTerm]: filteredSuggestions,
-        }));
+  const debounceApi = useCallback(
+    debounce((searchTerm: string) => {
+      // console.log(endTime - startTime.current);
+      setLoading(true);
+      // Check if suggestions are cached for the current search term
+      if (cachedSuggestions[searchTerm]) {
+        setSuggestions(cachedSuggestions[searchTerm]);
         setLoading(false);
-      });
-    }
-  }, [searchTerm]);
+      } else {
+        const returnPromise: Promise<getTickerSuggestionsResponse> =
+          getTickerSuggestions(searchTerm);
 
-  const getTickerSuggestionsDebounced = useCallback(
-    debounce(debounceAPi, 1000),
-    [debounceAPi]
+        returnPromise.then((response) => {
+          console.log(response.tickers);
+          const filteredSuggestions = response?.tickers ?? [];
+          setSuggestions([...filteredSuggestions]);
+          // Cache the suggestions for the current search term
+          setCachedSuggestions((prevCached) => ({
+            ...prevCached,
+            [searchTerm]: filteredSuggestions,
+          }));
+          setLoading(false);
+        });
+      }
+    }, 500), // Adjust the debounce delay here (in milliseconds)
+    [cachedSuggestions]
   );
 
   useEffect(() => {
     if (searchTerm) {
-      getTickerSuggestionsDebounced();
+      setLoading(true);
+      debounceApi(searchTerm);
     } else {
       setSuggestions([]);
       setLoading(false);
     }
   }, [searchTerm]);
 
+  console.log(loading);
   const contextValue: StockWidgetContextValue = {
     searchTerm,
     suggestions,

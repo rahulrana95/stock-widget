@@ -3,11 +3,7 @@ import Home from "../components/home";
 import { StockWidgetProvider } from "../context/stock-widget-context";
 
 const HomePage = () => {
-  return (
-    <StockWidgetProvider>
-      <Home />
-    </StockWidgetProvider>
-  );
+  return <Home />;
 };
 
 export default HomePage;

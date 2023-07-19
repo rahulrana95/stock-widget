@@ -8,17 +8,12 @@ import getTickerSuggestions, {
   Ticker,
 } from "../../services/getTickets";
 import { useNavigate } from "react-router-dom";
-import { debounce } from "../../utils";
 import { useStockWidgetContext } from "../../context/stock-widget-context";
+import CloseIcon from "../../images/close-icon.png";
 
 const StockWidget = (props: any) => {
-  const {
-    searchTerm,
-    suggestions,
-    //loading,
-    setLoading,
-    setSearchTerm,
-  } = useStockWidgetContext();
+  const { searchTerm, suggestions, loading, setLoading, setSearchTerm } =
+    useStockWidgetContext();
 
   const navigate = useNavigate();
 
@@ -33,7 +28,16 @@ const StockWidget = (props: any) => {
     setSearchTerm("");
   };
 
-  const loading = false;
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      navigate(`/stock/${searchTerm}`);
+    }
+  };
+
   return (
     <div className="stock-widget">
       <InputGroup>
@@ -46,21 +50,27 @@ const StockWidget = (props: any) => {
           aria-describedby="Search stock by stock picker"
           value={searchTerm}
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
         />
+        {searchTerm && ( // Show the close icon only when there's text in the input field
+          <InputGroup.Text onClick={handleClearSearch} className="clear-icon">
+            <img src={CloseIcon} alt="Clear icon" className="close-icon" />
+          </InputGroup.Text>
+        )}
       </InputGroup>
-      {suggestions.length > 0 && (
-        <ListGroup className="autocomplete-list suggestions-list">
-          {loading && (
-            <div className="loading-dots-container">
-              <span className="loading-dots">Loading</span>
-              <span className="loading-dots">.</span>
-              <span className="loading-dots">.</span>
-              <span className="loading-dots">.</span>
-            </div>
-          )}
-          {!loading &&
-            searchTerm &&
-            suggestions.map((item, index) => {
+      {loading && (
+        <div className="loading-dots-container">
+          <span className="loading-dots">Loading</span>
+          <span className="loading-dots">.</span>
+          <span className="loading-dots">.</span>
+          <span className="loading-dots">.</span>
+        </div>
+      )}
+
+      <ListGroup className="autocomplete-list suggestions-list">
+        {!loading && searchTerm && (
+          <div>
+            {suggestions.map((item, index) => {
               return (
                 <ListGroup.Item
                   key={index}
@@ -71,8 +81,10 @@ const StockWidget = (props: any) => {
                 </ListGroup.Item>
               );
             })}
-        </ListGroup>
-      )}
+            <div className="no-result">No results.</div>
+          </div>
+        )}
+      </ListGroup>
     </div>
   );
 };
