@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import StockviewPage from "../stock-view";
 import GlobalProvider from "../../context/global-context";
 import { useParams, useLocation } from "react-router-dom"; // Import the hooks
 import fetchTickerDetails from "../../services/getTickerDetails";
 import getTicketDetailsOfATicker from "../../fixtures/getTicketDetailsOfATicker.json";
+import StockDetailsProvider from "../../context/stock-details";
 
 // Mock useParams and useLocation
 jest.mock("react-router-dom", () => ({
@@ -28,7 +28,9 @@ describe("StockDetails component", () => {
     fetchTickerDetails.mockResolvedValue(getTicketDetailsOfATicker);
     render(
       <GlobalProvider>
-        <StockviewPage />
+        <StockDetailsProvider ticker="MCK">
+          <StockviewPage />
+        </StockDetailsProvider>
       </GlobalProvider>
     );
     expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -43,7 +45,9 @@ describe("StockDetails component", () => {
     fetchTickerDetails.mockRejectedValue(mockError.message);
     render(
       <GlobalProvider>
-        <StockviewPage />
+        <StockDetailsProvider ticker="MCK">
+          <StockviewPage />
+        </StockDetailsProvider>
       </GlobalProvider>
     );
 
@@ -55,14 +59,16 @@ describe("StockDetails component", () => {
   });
 
   // Test case for successful data rendering
-  it.only("renders stock details when stock prop is provided", async () => {
+  it("renders stock details when stock prop is provided", async () => {
     useParams.mockReturnValue({ ticker: "MCK" });
     useLocation.mockReturnValue({ pathname: "/stocks/MCK" });
 
     fetchTickerDetails.mockResolvedValue(getTicketDetailsOfATicker);
     render(
       <GlobalProvider>
-        <StockviewPage />
+        <StockDetailsProvider ticker="MCK">
+          <StockviewPage />
+        </StockDetailsProvider>
       </GlobalProvider>
     );
 
@@ -86,7 +92,9 @@ describe("StockDetails component", () => {
     });
     render(
       <GlobalProvider>
-        <StockviewPage />
+        <StockDetailsProvider ticker="MCK">
+          <StockviewPage />
+        </StockDetailsProvider>
       </GlobalProvider>
     );
 

@@ -6,10 +6,10 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-// import debounce from "lodash/debounce";
-import getTickerSuggestions, { Ticker } from "../services/getTickets";
-import { useNavigate } from "react-router-dom";
-import { getTickerSuggestionsResponse } from "../services/getTickets";
+import getTickerSuggestions, {
+  Ticker,
+  getTickerSuggestionsResponse,
+} from "../services/getTickets";
 
 type DebouncedFunction<T extends (...args: any[]) => any> = (
   ...args: Parameters<T>
@@ -52,7 +52,7 @@ const StockWidgetContext = createContext<StockWidgetContextValue>({
   setSearchTerm: () => {},
 });
 
-const useStockWidgetContext = () => useContext(StockWidgetContext);
+export const useStockWidgetContext = () => useContext(StockWidgetContext);
 
 interface StockWidgetProviderProps {
   children: React.ReactNode;
@@ -70,7 +70,6 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
 
   const debounceApi = useCallback(
     debounce((searchTerm: string) => {
-      // console.log(endTime - startTime.current);
       setLoading(true);
       // Check if suggestions are cached for the current search term
       if (cachedSuggestions[searchTerm]) {
@@ -81,7 +80,6 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
           getTickerSuggestions(searchTerm);
 
         returnPromise.then((response) => {
-          console.log(response.tickers);
           const filteredSuggestions = response?.tickers ?? [];
           setSuggestions([...filteredSuggestions]);
           // Cache the suggestions for the current search term
@@ -106,7 +104,6 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
     }
   }, [searchTerm]);
 
-  console.log(loading);
   const contextValue: StockWidgetContextValue = {
     searchTerm,
     suggestions,
@@ -122,5 +119,4 @@ const StockWidgetProvider: React.FC<StockWidgetProviderProps> = ({
     </StockWidgetContext.Provider>
   );
 };
-
-export { useStockWidgetContext, StockWidgetProvider };
+export default StockWidgetProvider;

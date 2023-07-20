@@ -27,7 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test-rtl": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:coverage": "react-scripts test --coverage"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +54,9 @@
     "@types/lodash": "^4.14.195",
     "@types/react": "^18.2.15",
     "@types/react-window": "^1.8.5",
-    "http-proxy-middleware": "^2.0.6"
+    "fetch-mock-jest": "^1.5.1",
+    "http-proxy-middleware": "^2.0.6",
+    "jest-fetch-mock": "^3.0.3",
+    "node-fetch": "^3.3.1"
   }
 }

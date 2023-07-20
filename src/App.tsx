@@ -7,7 +7,7 @@ import StockDetailsPage from "./pages/stock-view";
 import Layout from "./components/layout";
 import HelpPage from "./pages/help";
 import AboutUsPage from "./pages/about-us";
-import { StockWidgetProvider } from "./context/stock-widget-context";
+import StockWidgetProvider from "./context/stock-widget-context";
 import GlobalProvider from "./context/global-context";
 
 function App() {

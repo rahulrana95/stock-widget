@@ -4,94 +4,149 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import StockWidget from "../home";
-import { useStockWidgetContext } from "../../context/stock-widget-context";
+import StockWidgetProvider, {
+  useStockWidgetContext,
+} from "../../context/stock-widget-context";
+import GlobalProvider from "../../context/global-context";
+import { useParams, useLocation } from "react-router-dom"; // Import the hooks
+import Layout from "../../components/layout";
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import getTickerSuggestions from "../../services/getTickets";
+import getTickersData from "../../fixtures/getTickets.json";
+import { fixKeys } from "../../utils";
 
-// Mock the useStockWidgetContext custom hook
-jest.mock("../../context/stock-widget-context", () => ({
-  useStockWidgetContext: jest.fn(),
+// Mock useParams and useLocation
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"), // Import all other exports
+  useParams: jest.fn(),
+  useLocation: jest.fn(),
+  useNavigate: jest.fn(),
 }));
+
+// Mock the API call using Jest's mock functions
+jest.mock("../../services/getTickets");
 
 describe("StockWidget component", () => {
   const setSearchTerm = jest.fn();
   const setLoading = jest.fn();
 
-  beforeEach(() => {
-    // Mock the context values returned by useStockWidgetContext
-    useStockWidgetContext.mockReturnValue({
-      searchTerm: "",
-      suggestions: [],
-      setLoading,
-      setSearchTerm,
-    });
-  });
+  it("renders the search input", () => {
+    // Mock useParams and useLocation to provide necessary route data
+    useParams.mockReturnValue({ ticker: "MCK" });
+    useLocation.mockReturnValue({ pathname: "/" });
 
-  it.only("renders the search input", () => {
-    render(<StockWidget />);
+    render(
+      <Router>
+        <GlobalProvider>
+          <StockWidgetProvider>
+            <Layout />
+          </StockWidgetProvider>
+        </GlobalProvider>
+      </Router>
+    );
+
     const searchInput = screen.getByPlaceholderText(
       "Search stock by stock picker"
     );
     expect(searchInput).toBeInTheDocument();
   });
 
-  it("calls setSearchTerm and setLoading on input change", () => {
-    render(<StockWidget />);
+  it("calls setSearchTerm and setLoading on input change", async () => {
+    // Mock useParams and useLocation to provide necessary route data
+    useParams.mockReturnValue({ ticker: "MCK" });
+    useLocation.mockReturnValue({ pathname: "/" });
+    getTickerSuggestions.mockResolvedValue({
+      tickers: fixKeys(getTickersData.bestMatches),
+    });
+
+    render(
+      <Router>
+        <GlobalProvider>
+          <StockWidgetProvider>
+            <Layout />
+          </StockWidgetProvider>
+        </GlobalProvider>
+      </Router>
+    );
     const searchInput = screen.getByPlaceholderText(
       "Search stock by stock picker"
     );
-    fireEvent.change(searchInput, { target: { value: "AAPL" } });
-    expect(setSearchTerm).toHaveBeenCalledWith("AAPL");
-    expect(setLoading).toHaveBeenCalledWith(true);
+    fireEvent.change(searchInput, { target: { value: "T" } });
+
+    await waitFor(() => expect(screen.queryByText("Loading")).toBeVisible());
+    await waitFor(() =>
+      expect(screen.queryByText("AT&T Inc (T)")).toBeVisible()
+    );
+    expect(
+      screen.getByPlaceholderText("Search stock by stock picker").value
+    ).toBe("T");
   });
 
-  it("renders suggestions when suggestions are available", async () => {
-    const mockSuggestions = [
-      { name: "Apple Inc.", symbol: "AAPL" },
-      { name: "Amazon.com Inc.", symbol: "AMZN" },
-    ];
-    useStockWidgetContext.mockReturnValue({
-      searchTerm: "AAPL",
-      suggestions: mockSuggestions,
-      setLoading,
-      setSearchTerm,
+  it("navigates to the stock details page when clicking on a suggestion", async () => {
+    // Mock useParams and useLocation to provide necessary route data
+    useParams.mockReturnValue({ ticker: "MCK" });
+    useLocation.mockReturnValue({ pathname: "/" });
+
+    getTickerSuggestions.mockResolvedValue({
+      tickers: fixKeys(getTickersData.bestMatches),
     });
+
+    // Mock the navigate function
+    const mockNavigate = jest.fn();
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
     render(
-      <MemoryRouter>
-        <StockWidget />
-      </MemoryRouter>
+      <Router>
+        <GlobalProvider>
+          <StockWidgetProvider>
+            <Layout />
+          </StockWidgetProvider>
+        </GlobalProvider>
+      </Router>
+    );
+    const searchInput = screen.getByPlaceholderText(
+      "Search stock by stock picker"
+    );
+    fireEvent.change(searchInput, { target: { value: "T" } });
+
+    await waitFor(() => expect(screen.queryByText("Loading")).toBeVisible());
+    await waitFor(() =>
+      expect(screen.queryByText("AT&T Inc (T)")).toBeVisible()
     );
 
-    const suggestionItems = screen.getAllByRole("listitem");
-    expect(suggestionItems).toHaveLength(mockSuggestions.length);
-
-    // Ensure that suggestion items are rendered correctly
-    mockSuggestions.forEach((item, index) => {
-      const suggestionText = `${item.name} (${item.symbol})`;
-      expect(screen.getByText(suggestionText)).toBeInTheDocument();
-    });
-  });
-
-  it("navigates to the stock details page when clicking on a suggestion", () => {
-    const mockSuggestions = [{ name: "Apple Inc.", symbol: "AAPL" }];
-    useStockWidgetContext.mockReturnValue({
-      searchTerm: "AAPL",
-      suggestions: mockSuggestions,
-      setLoading,
-      setSearchTerm,
-    });
-
-    render(
-      <MemoryRouter>
-        <StockWidget />
-      </MemoryRouter>
-    );
-
-    const suggestionItem = screen.getByText("Apple Inc. (AAPL)");
+    const suggestionItem = screen.getByText("AT&T Inc (T)");
     fireEvent.click(suggestionItem);
 
-    expect(setSearchTerm).toHaveBeenCalledWith("");
-    expect(setLoading).toHaveBeenCalledWith(true);
-    // Assert that the navigate function from useNavigate was called with the correct path
-    // For simplicity, you can mock the useNavigate hook to spy on the function.
+    // Assert that useNavigate was called with the correct path
+    expect(mockNavigate).toHaveBeenCalledWith("/stock/T");
+  });
+
+  it("should show no results", async () => {
+    // Mock useParams and useLocation to provide necessary route data
+    useParams.mockReturnValue({ ticker: "MCK" });
+    useLocation.mockReturnValue({ pathname: "/" });
+
+    getTickerSuggestions.mockResolvedValue({
+      tickers: [],
+    });
+
+    render(
+      <Router>
+        <GlobalProvider>
+          <StockWidgetProvider>
+            <Layout />
+          </StockWidgetProvider>
+        </GlobalProvider>
+      </Router>
+    );
+    const searchInput = screen.getByPlaceholderText(
+      "Search stock by stock picker"
+    );
+    fireEvent.change(searchInput, { target: { value: "T" } });
+
+    await waitFor(() => expect(screen.queryByText("Loading")).toBeVisible());
+    await waitFor(() =>
+      expect(screen.queryByText("No results.")).toBeVisible()
+    );
   });
 });

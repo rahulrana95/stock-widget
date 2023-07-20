@@ -15,6 +15,8 @@ function fetchTickerDetails(
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data: { [key: string]: string }) => {
+        console.log(data);
+        console.log(apiUrl);
         if (data.Note || data.Information || !Object.keys(data).length) {
           reject("There is something wrong.");
         } else {

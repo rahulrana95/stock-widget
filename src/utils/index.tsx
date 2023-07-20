@@ -18,6 +18,18 @@ function debounce<T extends any[]>(
   };
 }
 
-function fixKeys(obj: Object) {}
+function fixKeys(
+  arr: Array<{ [key: string]: string }>
+): Array<{ [key: string]: string }> {
+  return arr.map((ticket) => {
+    const newTicket: { [key: string]: string } = {};
+    Object.entries(ticket).forEach(([key, value]) => {
+      const newKey: string | undefined = key.split(" ").pop() ?? "";
 
-export { debounce };
+      newTicket[newKey] = value;
+    });
+    return newTicket;
+  });
+}
+
+export { debounce, fixKeys };
