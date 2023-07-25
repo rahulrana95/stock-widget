@@ -1,0 +1,60 @@
+// currencyConfig.ts
+
+export interface CurrencyConfig {
+  [currencyCode: string]: string;
+}
+
+const currencyConfig: CurrencyConfig = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  JPY: "¥",
+  INR: "₹",
+  AUD: "A$",
+  CAD: "C$",
+  CHF: "CHF",
+  CNY: "¥",
+  KRW: "₩",
+  BRL: "R$",
+  MXN: "$",
+  SGD: "S$",
+  HKD: "HK$",
+  NZD: "NZ$",
+  RUB: "₽",
+  ZAR: "R",
+  SAR: "ر.س",
+  AED: "د.إ",
+  TRY: "₺",
+  SEK: "kr",
+  NOK: "kr",
+  DKK: "kr",
+  PLN: "zł",
+  THB: "฿",
+  IDR: "Rp",
+  MYR: "RM",
+  PHP: "₱",
+  ILS: "₪",
+  ARS: "$",
+  CLP: "$",
+  COP: "$",
+  EGP: "£",
+  NGN: "₦",
+  PKR: "₨",
+  VND: "₫",
+  BDT: "৳",
+  KES: "KSh",
+  GHS: "₵",
+  UAH: "₴",
+  KZT: "₸",
+  PEN: "S/",
+  MAD: "د.م.",
+  RON: "lei",
+  HUF: "Ft",
+  CZK: "Kč",
+  HRK: "kn",
+  ISK: "kr",
+  TWD: "NT$",
+  // Add more currency codes and their respective symbols as needed
+};
+
+export default currencyConfig;

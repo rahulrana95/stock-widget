@@ -28,12 +28,14 @@ export type Stock = {
   peRatio: string;
   marketCap: string;
   sector: string;
+  chart: any;
 };
 
 const keysToSkip: {
   [key: string]: string;
 } = {
   description: "description",
+  chart: "chart",
 };
 
 type StockDetailsT = {
@@ -43,7 +45,7 @@ type StockDetailsT = {
   isLoading: boolean;
 };
 const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
-  //   GLOBAL_QUOTE
+  console.log(stock);
   return (
     <div className="stock-details content-area">
       {isLoading && <div>Loading...</div>}
@@ -58,7 +60,7 @@ const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
       {!isLoading && !error && (
         <Row>
           <Col lg={6} sm={12} className="stock-chart">
-            <StockChart symbol={ticker} />
+            <StockChart symbol={ticker} chartData={stock?.chart} />
           </Col>
           <Col lg={6} sm={12} className="stock-details-items">
             {Object.entries(stock ?? {})

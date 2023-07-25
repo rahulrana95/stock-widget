@@ -18,7 +18,7 @@ const StockDetailsPage = () => {
 
   const { stockCaching, setStockCaching } = useGlobalContext();
 
-  useEffect(() => {
+  const fetchData = () => {
     if (ticker && !isLoading) {
       setIsLoading(true);
       if (stockCaching[ticker]) {
@@ -27,17 +27,19 @@ const StockDetailsPage = () => {
       } else {
         fetchTickerDetails(ticker)
           .then((response: any) => {
+            const { data, chartData } = response;
             const currentStock = {
-              name: titleCase(response.Name),
-              symbol: response.Symbol,
-              description: response.Description,
+              name: titleCase(data.Name),
+              symbol: data.Symbol,
+              description: data.Description,
               currentPrice: "120",
-              industry: titleCase(response.Industry),
-              sector: titleCase(response.Sector),
-              peRatio: titleCase(response.PERatio),
+              industry: titleCase(data.Industry),
+              sector: titleCase(data.Sector),
+              peRatio: titleCase(data.PERatio),
               marketCap: Intl.NumberFormat("en", {
                 notation: "compact",
-              }).format(parseInt(response.MarketCapitalization)),
+              }).format(parseInt(data.MarketCapitalization)),
+              chart: chartData,
             };
             setStock(currentStock);
             setStockCaching(currentStock);
@@ -49,7 +51,16 @@ const StockDetailsPage = () => {
           });
       }
     }
+  };
+
+  useEffect(() => {
+    fetchData();
+    setInterval(() => {
+      fetchData();
+    }, 5000);
   }, []);
+
+  console.log("---ss");
 
   return <StockDetails stock={stock} error={error} isLoading={isLoading} />;
 };

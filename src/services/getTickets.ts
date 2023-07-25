@@ -1,4 +1,5 @@
 import getTicketsData from "../fixtures/getTickets.json";
+
 export interface Ticker {
   [key: string]: string;
 }

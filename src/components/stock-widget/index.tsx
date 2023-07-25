@@ -67,8 +67,8 @@ const StockWidget = (props: any) => {
         </div>
       )}
 
-      <ListGroup className="autocomplete-list suggestions-list">
-        {!loading && searchTerm && (
+      {!loading && searchTerm && (
+        <ListGroup className="autocomplete-list suggestions-list">
           <div>
             {suggestions.map((item, index) => {
               return (
@@ -83,8 +83,8 @@ const StockWidget = (props: any) => {
             })}
             <div className="no-result">No results.</div>
           </div>
-        )}
-      </ListGroup>
+        </ListGroup>
+      )}
     </div>
   );
 };
