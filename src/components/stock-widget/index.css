@@ -71,3 +71,7 @@
   width: 20px;
   cursor: pointer;
 }
+
+.hide-clear-icon {
+  visibility: hidden;
+}

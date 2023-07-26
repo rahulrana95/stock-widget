@@ -45,7 +45,6 @@ type StockDetailsT = {
   isLoading: boolean;
 };
 const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
-  console.log(stock);
   return (
     <div className="stock-details content-area">
       {isLoading && <div>Loading...</div>}

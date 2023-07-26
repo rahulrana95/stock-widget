@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,7 +43,7 @@ const StockChart = ({ symbol, chartData }: PropsT) => {
         // @ts-ignore
         <Line options={options} data={chartData} />
       ) : (
-        <div>Loading...</div>
+        <div>N/A</div>
       )}
     </>
   );

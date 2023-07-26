@@ -52,11 +52,12 @@ const StockWidget = (props: any) => {
           onChange={handleChange}
           onKeyPress={handleKeyPress}
         />
-        {searchTerm && ( // Show the close icon only when there's text in the input field
-          <InputGroup.Text onClick={handleClearSearch} className="clear-icon">
-            <img src={CloseIcon} alt="Clear icon" className="close-icon" />
-          </InputGroup.Text>
-        )}
+        <InputGroup.Text
+          onClick={handleClearSearch}
+          className={`clear-icon ${searchTerm ? "" : "hide-clear-icon"}`}
+        >
+          <img src={CloseIcon} alt="Clear icon" className="close-icon" />
+        </InputGroup.Text>
       </InputGroup>
       {loading && (
         <div className="loading-dots-container">
