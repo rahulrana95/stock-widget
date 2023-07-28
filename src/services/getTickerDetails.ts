@@ -3,14 +3,12 @@ import dummyResponse from "../fixtures/data.json";
 
 const apiKey = process.env.REACT_APP_ALPHA_ADVANTAGE_KEY;
 
-// @ts-ignore
-const parseData = (data) => {
+const parseData = (data: any) => {
   const timestamps = data.chart.result[0].timestamp;
   const prices = data.chart.result[0].indicators.quote[0].close;
 
   const chartData = {
-    // @ts-ignore
-    labels: timestamps.map((ts) => new Date(ts).getMinutes()),
+    labels: timestamps.map((ts: any) => new Date(ts).getMinutes()),
     datasets: [
       {
         label: "Stock Price",
@@ -35,11 +33,11 @@ function fetchTickerDetails(
 
   return new Promise((resolve, reject) => {
     // for mock data un comment the code
-    resolve({
-      data: getTicketDetailsOfATickerData,
-      chartData: parseData(dummyResponse),
-    });
-    return;
+    // resolve({
+    //   data: getTicketDetailsOfATickerData,
+    //   chartData: parseData(dummyResponse),
+    // });
+    // return;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data: { [key: string]: string }) => {
