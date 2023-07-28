@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "./index.css";
+import { useIntl } from "react-intl";
 
 ChartJS.register(
   CategoryScale,
@@ -37,13 +38,15 @@ type PropsT = {
 };
 
 const StockChart = ({ symbol, chartData }: PropsT) => {
+  const intl = useIntl();
+
   return (
     <>
       {chartData ? (
         // @ts-ignore
         <Line options={options} data={chartData} />
       ) : (
-        <div>N/A</div>
+        <div>{intl.formatMessage({ id: "data_not_found.na" })}</div>
       )}
     </>
   );

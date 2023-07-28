@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import InputGroup from "react-bootstrap/InputGroup";
 import { Form, ListGroup } from "react-bootstrap";
 import SearchIcon from "../../images/search-icon.svg";
 import "./index.css";
-import getTickerSuggestions, {
-  getTickerSuggestionsResponse,
-  Ticker,
-} from "../../services/getTickets";
+import { Ticker } from "../../services/getTickets";
 import { useNavigate } from "react-router-dom";
 import { useStockWidgetContext } from "../../context/stock-widget-context";
 import CloseIcon from "../../images/close-icon.png";
+import { useIntl } from "react-intl";
 
 const StockWidget = (props: any) => {
+  const intl = useIntl();
+
   const { searchTerm, suggestions, loading, setLoading, setSearchTerm } =
     useStockWidgetContext();
 
@@ -61,7 +61,11 @@ const StockWidget = (props: any) => {
       </InputGroup>
       {loading && (
         <div className="loading-dots-container">
-          <span className="loading-dots">Loading</span>
+          <span className="loading-dots">
+            {intl.formatMessage({
+              id: "loading",
+            })}
+          </span>
           <span className="loading-dots">.</span>
           <span className="loading-dots">.</span>
           <span className="loading-dots">.</span>
@@ -82,7 +86,12 @@ const StockWidget = (props: any) => {
                 </ListGroup.Item>
               );
             })}
-            <div className="no-result">No results.</div>
+            <div className="no-result">
+              {" "}
+              {intl.formatMessage({
+                id: "no_results",
+              })}
+            </div>
           </div>
         </ListGroup>
       )}

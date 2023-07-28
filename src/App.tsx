@@ -9,23 +9,33 @@ import HelpPage from "./pages/help";
 import AboutUsPage from "./pages/about-us";
 import StockWidgetProvider from "./context/stock-widget-context";
 import GlobalProvider from "./context/global-context";
+import { IntlProvider } from "react-intl";
+import messages_en from "./translations/en.json";
+
+const messages: Record<string, any> = {
+  en: messages_en,
+};
+
+const language = navigator.language.split(/[-_]/)[0]; // Get the user's preferred language
 
 function App() {
   return (
-    <Router>
-      <GlobalProvider>
-        <StockWidgetProvider>
-          <Layout>
-            <Routes>
-              <Route path="/" Component={HomePage} />
-              <Route path="/stock/:ticker" Component={StockDetailsPage} />
-              <Route path="/help" Component={HelpPage} />
-              <Route path="/about" Component={AboutUsPage} />
-            </Routes>
-          </Layout>
-        </StockWidgetProvider>
-      </GlobalProvider>
-    </Router>
+    <IntlProvider locale={language} messages={messages[language]}>
+      <Router>
+        <GlobalProvider>
+          <StockWidgetProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" Component={HomePage} />
+                <Route path="/stock/:ticker" Component={StockDetailsPage} />
+                <Route path="/help" Component={HelpPage} />
+                <Route path="/about" Component={AboutUsPage} />
+              </Routes>
+            </Layout>
+          </StockWidgetProvider>
+        </GlobalProvider>
+      </Router>
+    </IntlProvider>
   );
 }
 

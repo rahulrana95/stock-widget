@@ -5,9 +5,11 @@ import { Navbar, Nav, Form, FormControl, Button, Col } from "react-bootstrap";
 import StockWidget from "../stock-widget";
 import "./index.css";
 import { useLocation } from "react-router-dom";
+import { useIntl } from "react-intl";
 
 const Header = () => {
   const location = useLocation();
+  const intl = useIntl();
 
   return (
     <Navbar bg="light" expand="lg" className="header content-area">
@@ -34,7 +36,7 @@ const Header = () => {
               href="/"
               className={location.pathname === "/" ? "active" : ""}
             >
-              Home
+              {intl.formatMessage({ id: "header_menu.home" })}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
@@ -42,7 +44,7 @@ const Header = () => {
               href="/help"
               className={location.pathname === "/help" ? "active" : ""}
             >
-              Help
+              {intl.formatMessage({ id: "header_menu.help" })}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
@@ -50,7 +52,7 @@ const Header = () => {
               href="/about"
               className={location.pathname === "/about" ? "active" : ""}
             >
-              About
+              {intl.formatMessage({ id: "header_menu.about" })}
             </Nav.Link>
           </Nav.Item>
         </Nav>

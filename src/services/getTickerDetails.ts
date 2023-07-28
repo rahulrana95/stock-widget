@@ -34,7 +34,6 @@ function fetchTickerDetails(
   const apiUrl = `https://www.alphavantage.co/query?function=${functionVal}&symbol=${ticketSymbol}&apikey=${apiKey}`;
 
   return new Promise((resolve, reject) => {
-    console.log("called");
     // for mock data un comment the code
     resolve({
       data: getTicketDetailsOfATickerData,

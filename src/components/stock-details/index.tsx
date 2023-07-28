@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import StockChart from "../chart";
-import StockWidget from "../stock-widget";
 import { Col, Row, Card, OverlayTrigger, Tooltip } from "react-bootstrap";
 import "./index.css";
-import fetchTickerDetails from "../../services/getTickerDetails";
+import { useIntl } from "react-intl";
 
 const Labels: {
   [key: string]: string;
 } = {
-  name: "Name",
-  symbol: "Symbol",
-  marketCap: "Market Cap",
-  peRatio: "PE Ratio",
-  description: "Description",
-  currentPrice: "Current Price",
-  industry: "Industry",
-  sector: "Sector",
+  name: "stock_view.name",
+  symbol: "stock_view.symbol",
+  marketCap: "stock_view.market_cap",
+  peRatio: "stock_view.pe_ration",
+  description: "stock_view.escription",
+  currentPrice: "stock_view.current_price",
+  industry: "stock_view.industry",
+  sector: "stock_view.sector",
 };
 
 export type Stock = {
@@ -45,14 +43,23 @@ type StockDetailsT = {
   isLoading: boolean;
 };
 const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
+  const intl = useIntl();
+
   return (
     <div className="stock-details content-area">
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div>
+          {intl.formatMessage({
+            id: "loading",
+          })}
+          ...
+        </div>
+      )}
       {!isLoading && error && (
         <div className="error-message">
           <span role="img" aria-label="Error">
             ❌
-          </span>{" "}
+          </span>
           {error} {/* Display the error message */}
         </div>
       )}
@@ -77,7 +84,9 @@ const StockDetails = ({ stock, ticker, error, isLoading }: StockDetailsT) => {
                     <Card className="stock-info-box">
                       <Card.Body>
                         <Card.Title className="title">
-                          {Labels[key] ?? "N/A"}
+                          {intl.formatMessage({
+                            id: Labels[key] ?? "data_not_found.na",
+                          })}
                         </Card.Title>
                         <Card.Text className="description d-xs-block d-sm-block d-md-block">
                           {value}

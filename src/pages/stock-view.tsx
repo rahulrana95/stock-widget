@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { createFalse } from "typescript";
 import StockDetails, { Stock } from "../components/stock-details";
 import { useGlobalContext } from "../context/global-context";
 import fetchTickerDetails from "../services/getTickerDetails";
@@ -59,8 +58,6 @@ const StockDetailsPage = () => {
       fetchData();
     }, 5000);
   }, []);
-
-  console.log("---ss");
 
   return <StockDetails stock={stock} error={error} isLoading={isLoading} />;
 };

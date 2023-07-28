@@ -1,18 +1,20 @@
 import React from "react";
-import StockChart from "../chart";
-import Header from "../header";
 import "./index.css";
 import { Container, Row, Col, Table } from "react-bootstrap";
+import { useIntl } from "react-intl";
 
 const Home = () => {
+  const intl = useIntl();
   return (
     <div className="home content-area">
       <Container fluid className="home-page">
         <Row>
           <Col>
-            <h1>Welcome to TickerInsight!</h1>
+            <h1>{intl.formatMessage({ id: "home.welcome_to_ticket" })} </h1>
             <p className="sub-heading">
-              Your Comprehensive Stock Market Analytics Platform
+              {intl.formatMessage({
+                id: "home.heading_stock_market_analytics_platform",
+              })}
             </p>
           </Col>
         </Row>
@@ -21,11 +23,31 @@ const Home = () => {
             <Table striped bordered hover responsive>
               <thead>
                 <tr>
-                  <th>Stock</th>
-                  <th>Price</th>
-                  <th>Change</th>
-                  <th>Volume</th>
-                  <th>Market Cap</th>
+                  <th>
+                    {intl.formatMessage({
+                      id: "home.stock",
+                    })}
+                  </th>
+                  <th>
+                    {intl.formatMessage({
+                      id: "home.price",
+                    })}
+                  </th>
+                  <th>
+                    {intl.formatMessage({
+                      id: "home.change",
+                    })}
+                  </th>
+                  <th>
+                    {intl.formatMessage({
+                      id: "home.volume",
+                    })}
+                  </th>
+                  <th>
+                    {intl.formatMessage({
+                      id: "home.market_cap",
+                    })}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -64,20 +86,43 @@ const Home = () => {
         <Row>
           <Col>
             <div className="info-section">
-              <h2>Why Choose Stocklytics?</h2>
+              <h2>
+                {intl.formatMessage({
+                  id: "home.why_choose_stockalyitcs",
+                })}
+              </h2>
               <p>
-                At Stocklytics, we provide you with cutting-edge tools and
-                insights to make informed investment decisions. Our platform
-                offers comprehensive analytics, real-time data, and intuitive
-                visualizations, empowering you to navigate the stock market with
-                confidence.
+                {intl.formatMessage({
+                  id: "home.stock_desc",
+                })}
               </p>
-              <p>With Stocklytics, you can:</p>
+              <p>
+                {intl.formatMessage({
+                  id: "home.with_stock_you_can",
+                })}
+              </p>
               <ul>
-                <li>Track the performance of your favorite stocks</li>
-                <li>Analyze historical price trends</li>
-                <li>Receive personalized investment recommendations</li>
-                <li>Stay up-to-date with the latest market news</li>
+                <li>
+                  {intl.formatMessage({
+                    id: "home.track_perfm",
+                  })}
+                </li>
+                <li>
+                  {intl.formatMessage({
+                    id: "home.historical_price",
+                  })}
+                </li>
+                <li>
+                  {intl.formatMessage({
+                    id: "home.recomendation",
+                  })}
+                </li>
+                <li>
+                  {" "}
+                  {intl.formatMessage({
+                    id: "home.upto_date",
+                  })}
+                </li>
               </ul>
             </div>
           </Col>

@@ -2,6 +2,8 @@ import React, { ReactNode } from "react";
 import fetchTickerDetails from "../services/getTickerDetails";
 import { useParams } from "react-router-dom";
 
+export type Chart = {};
+
 type Stock = {
   name: string;
   symbol: string;
@@ -11,6 +13,7 @@ type Stock = {
   peRatio: string;
   marketCap: string;
   sector: string;
+  chart: Chart;
 };
 
 type StockContextType = {
@@ -55,6 +58,7 @@ const StockDetailsProvider: React.FC<StockProviderT> = ({
             marketCap: Intl.NumberFormat("en", {
               notation: "compact",
             }).format(parseInt(response.MarketCapitalization)),
+            chart: {},
           });
         })
         .catch((error) => {
